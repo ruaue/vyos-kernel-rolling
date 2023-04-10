@@ -25,14 +25,14 @@ jobs:
       run: |
         set -eux
         
-        git clone  -b dev https://github.com/debiansid/vyos-kernel-sv-fullconenat build
+        git clone  -b dev https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
 
     - name: make deb
     #  working-directory: vyos-kernel-sv-fullconenat
       run: |
         set -eux
         pwd
-        cd build
+        cd vyos-build
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.8.tar.xz
         tar xf linux-6.1.8.tar.xz
         ln -s linux-6.1.8 linux
@@ -44,13 +44,13 @@ jobs:
         set -eux
 
         pwd
-        ls -lah build
+        ls -lah vyos-build
 
     - name: Upload release
       uses: softprops/action-gh-release@v1
       with:
           tag_name: ${{ github.ref_name }}
-          files: build/linux*.deb
+          files: vyos-build/linux*.deb
           draft: true
           prerelease: true
           
