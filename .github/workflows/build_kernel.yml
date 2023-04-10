@@ -15,11 +15,12 @@ jobs:
       run: |
         set -eux
         
-        git clone  -b dev https://github.com/debiansid/vyos-kernel-sv-fullconenat
+        git clone  -b dev https://github.com/debiansid/vyos-kernel-sv-fullconenat build
 
     - name: make deb
       working-directory: vyos-kernel-sv-fullconenat
       run: |
+        cd build
         ./build-kerel.sh
 
 
