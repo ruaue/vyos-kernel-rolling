@@ -51,7 +51,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
           tag_name: ${{ github.ref_name }}
-          files: vyos-kernel-sv-fullconenat/build/*.deb
+          files: vyos-kernel-sv-fullconenat/*.deb
           draft: true
           prerelease: true
           
