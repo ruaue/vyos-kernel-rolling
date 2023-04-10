@@ -45,13 +45,13 @@ jobs:
 
         pwd
         ls -lah
-        ls -lah build/linux
+        ls -lah build
 
     - name: Upload release
       uses: softprops/action-gh-release@v1
       with:
           tag_name: ${{ github.ref_name }}
-          files: vyos-kernel-sv-fullconenat/build/linux/*.deb
+          files: vyos-kernel-sv-fullconenat/build/*.deb
           draft: true
           prerelease: true
           
