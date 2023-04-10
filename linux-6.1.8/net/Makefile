@@ -76,5 +76,6 @@ obj-$(CONFIG_NET_L3_MASTER_DEV)	+= l3mdev/
 obj-$(CONFIG_QRTR)		+= qrtr/
 obj-$(CONFIG_NET_NCSI)		+= ncsi/
 obj-$(CONFIG_XDP_SOCKETS)	+= xdp/
+obj-$(CONFIG_PF_RING)		+= pf_ring/
 obj-$(CONFIG_MPTCP)		+= mptcp/
 obj-$(CONFIG_MCTP)		+= mctp/

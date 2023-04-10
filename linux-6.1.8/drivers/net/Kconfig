@@ -191,6 +191,16 @@ config MACVTAP
 	  To compile this driver as a module, choose M here: the module
 	  will be called macvtap.
 
+config IPOE
+	tristate "IP over Ethernet driver"
+	help
+	  This provides the IP over Ethernet driver from accel-ppp
+
+config VLAN_MON
+	tristate "VLAN monitor driver"
+	help
+	  This provides the vlan_mon driver from accel-ppp
+
 config IPVLAN_L3S
 	depends on NETFILTER
 	depends on IPVLAN

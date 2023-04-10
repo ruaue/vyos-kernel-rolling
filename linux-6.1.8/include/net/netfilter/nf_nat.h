@@ -35,6 +35,11 @@ struct nf_conn_nat {
 #endif
 };
 
+/* Call input routing for SNAT-ed traffic */
+unsigned int ip_nat_route_input(void *priv,
+				struct sk_buff *skb,
+				const struct nf_hook_state *state);
+
 /* Set up the info structure to map into this range. */
 unsigned int nf_nat_setup_info(struct nf_conn *ct,
 			       const struct nf_nat_range2 *range,

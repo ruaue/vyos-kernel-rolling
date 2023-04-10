@@ -359,6 +359,9 @@ static int br_nf_pre_routing_finish(struct net *net, struct sock *sk, struct sk_
 
 	nf_bridge->frag_max_size = IPCB(skb)->frag_max_size;
 
+	/* Old skb->dst is not expected, it is lost in all cases */
+	skb_dst_drop(skb);
+
 	if (nf_bridge->pkt_otherhost) {
 		skb->pkt_type = PACKET_OTHERHOST;
 		nf_bridge->pkt_otherhost = false;

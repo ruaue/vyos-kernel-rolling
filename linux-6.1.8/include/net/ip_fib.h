@@ -426,6 +426,8 @@ static inline bool fib4_rules_early_flow_dissect(struct net *net,
 	return true;
 }
 
+u32 fib_result_table(struct fib_result *res);
+
 #endif /* CONFIG_IP_MULTIPLE_TABLES */
 
 /* Exported by fib_frontend.c */
@@ -437,7 +439,8 @@ __be32 fib_compute_spec_dst(struct sk_buff *skb);
 bool fib_info_nh_uses_dev(struct fib_info *fi, const struct net_device *dev);
 int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 			u8 tos, int oif, struct net_device *dev,
-			struct in_device *idev, u32 *itag);
+			struct in_device *idev, u32 *itag, int our);
+void fib_select_default(const struct flowi4 *flp, struct fib_result *res);
 #ifdef CONFIG_IP_ROUTE_CLASSID
 static inline int fib_num_tclassid_users(struct net *net)
 {

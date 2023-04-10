@@ -97,6 +97,10 @@ long get_nr_dirty_inodes(void)
 	return nr_dirty > 0 ? nr_dirty : 0;
 }
 
+/* sysctl */
+int device_sidechannel_restrict __read_mostly = 1;
+EXPORT_SYMBOL(device_sidechannel_restrict);
+
 /*
  * Handle nr_inode sysctl
  */
@@ -128,6 +132,15 @@ static struct ctl_table inodes_sysctls[] = {
 		.maxlen		= 7*sizeof(long),
 		.mode		= 0444,
 		.proc_handler	= proc_nr_inodes,
+	},
+	{
+		.procname	= "device_sidechannel_restrict",
+		.data		= &device_sidechannel_restrict,
+		.maxlen		= sizeof(int),
+		.mode		= 0644,
+		.proc_handler	= proc_dointvec_minmax_sysadmin,
+		.extra1		= SYSCTL_ZERO,
+		.extra2		= SYSCTL_ONE,
 	},
 	{ }
 };
@@ -984,6 +997,8 @@ unsigned int get_next_ino(void)
 	unsigned int *p = &get_cpu_var(last_ino);
 	unsigned int res = *p;
 
+start:
+
 #ifdef CONFIG_SMP
 	if (unlikely((res & (LAST_INO_BATCH-1)) == 0)) {
 		static atomic_t shared_last_ino;
@@ -996,7 +1011,7 @@ unsigned int get_next_ino(void)
 	res++;
 	/* get_next_ino should not provide a 0 inode number */
 	if (unlikely(!res))
-		res++;
+		goto start;
 	*p = res;
 	put_cpu_var(last_ino);
 	return res;

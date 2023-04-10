@@ -99,9 +99,11 @@ static inline void ipv4_devconf_setall(struct in_device *in_dev)
 #define IN_DEV_MFORWARD(in_dev)		IN_DEV_ANDCONF((in_dev), MC_FORWARDING)
 #define IN_DEV_BFORWARD(in_dev)		IN_DEV_ANDCONF((in_dev), BC_FORWARDING)
 #define IN_DEV_RPFILTER(in_dev)		IN_DEV_MAXCONF((in_dev), RP_FILTER)
+#define IN_DEV_RPFILTER_MASK(in_dev)	IN_DEV_CONF_GET(in_dev, RP_FILTER_MASK)
 #define IN_DEV_SRC_VMARK(in_dev)    	IN_DEV_ORCONF((in_dev), SRC_VMARK)
 #define IN_DEV_SOURCE_ROUTE(in_dev)	IN_DEV_ANDCONF((in_dev), \
 						       ACCEPT_SOURCE_ROUTE)
+#define IN_DEV_FORWARD_SHARED(in_dev)	IN_DEV_ANDCONF((in_dev), FORWARD_SHARED)
 #define IN_DEV_ACCEPT_LOCAL(in_dev)	IN_DEV_ORCONF((in_dev), ACCEPT_LOCAL)
 #define IN_DEV_BOOTP_RELAY(in_dev)	IN_DEV_ANDCONF((in_dev), BOOTP_RELAY)
 
@@ -114,6 +116,7 @@ static inline void ipv4_devconf_setall(struct in_device *in_dev)
 						      SECURE_REDIRECTS)
 #define IN_DEV_IDTAG(in_dev)		IN_DEV_CONF_GET(in_dev, TAG)
 #define IN_DEV_MEDIUM_ID(in_dev)	IN_DEV_CONF_GET(in_dev, MEDIUM_ID)
+#define IN_DEV_HIDDEN(in_dev)		IN_DEV_ANDCONF((in_dev), HIDDEN)
 #define IN_DEV_PROMOTE_SECONDARIES(in_dev) \
 					IN_DEV_ORCONF((in_dev), \
 						      PROMOTE_SECONDARIES)
@@ -137,6 +140,7 @@ static inline void ipv4_devconf_setall(struct in_device *in_dev)
 #define IN_DEV_ARP_NOTIFY(in_dev)	IN_DEV_MAXCONF((in_dev), ARP_NOTIFY)
 #define IN_DEV_ARP_EVICT_NOCARRIER(in_dev) IN_DEV_ANDCONF((in_dev), \
 							  ARP_EVICT_NOCARRIER)
+#define IN_DEV_LINKFILTER(in_dev)	IN_DEV_MAXCONF((in_dev), LINKFILTER)
 
 struct in_ifaddr {
 	struct hlist_node	hash;

@@ -1657,6 +1657,166 @@ config NETFILTER_XT_MATCH_U32
 
 	  Details and examples are in the kernel module source.
 
+config NETFILTER_XT_MATCH_ASN
+        tristate '"asn" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `asn' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_CONDITION
+        tristate '"condition" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `condition' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_DHCPMAC
+        tristate '"dhcpmac" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `dhcpmac' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_FUZZY
+        tristate '"fuzzy" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `fuzzy' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_GEOIP
+        tristate '"geoip" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `geoip' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_IFACE
+        tristate '"iface" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `iface' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_IPV4OPTIONS
+        tristate '"ipv4options" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `ipv4options' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_LENGTH2
+        tristate '"length2" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `length2' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_LSCAN
+        tristate '"lscan" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `lscan' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_PSD
+        tristate '"psd" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `psd' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_MATCH_QUOTA2
+        tristate '"quota2" match support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `quota2' match.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_CHAOS
+        tristate '"chaos" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `chaos' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_DNETMAP
+        tristate '"dnetmap" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `dnetmap' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_DELUDE
+        tristate '"delude" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `delude' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_ECHO
+        tristate '"echo" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `echo' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_IPMARK
+        tristate '"ipmark" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `ipmark' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_LOGMARK
+        tristate '"logmark" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `logmark' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_PROTO
+        tristate '"proto" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `proto' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_SYSRQ
+        tristate '"sysrq" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `sysrq' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
+config NETFILTER_XT_TARGET_TARPIT
+        tristate '"tarpit" target support'
+        depends on NETFILTER_ADVANCED
+        help
+          This option adds a `tarpit' target.
+
+          To compile it as a module, choose M here.  If unsure, say N.
+
 endif # NETFILTER_XTABLES
 
 endmenu

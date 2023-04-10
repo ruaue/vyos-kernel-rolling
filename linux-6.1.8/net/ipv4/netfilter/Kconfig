@@ -205,6 +205,14 @@ config IP_NF_TARGET_SYNPROXY
 
 	  To compile it as a module, choose M here. If unsure, say N.
 
+config IP_NF_TARGET_NETFLOW
+	tristate "NETFLOW target support"
+	help
+	  ipt_NETFLOW linux 2.6.x-5.x kernel module by <abc@openwall.com> -- 2008-2019.
+	  High performance NetFlow v5, v9, IPFIX flow data export module for Linux
+	  kernel. Created to be useful for linux routers in high-throughput networks.
+	  It should be used as iptables target
+
 # NAT + specific targets: nf_conntrack
 config IP_NF_NAT
 	tristate "iptables NAT support"

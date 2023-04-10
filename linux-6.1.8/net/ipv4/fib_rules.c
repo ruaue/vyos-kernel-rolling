@@ -78,6 +78,11 @@ unsigned int fib4_rules_seq_read(struct net *net)
 	return fib_rules_seq_read(net, AF_INET);
 }
 
+u32 fib_result_table(struct fib_result *res)
+{
+	return res->table ? res->table->tb_id : RT_TABLE_UNSPEC;
+}
+
 int __fib_lookup(struct net *net, struct flowi4 *flp,
 		 struct fib_result *res, unsigned int flags)
 {

@@ -1125,6 +1125,49 @@ static const struct nf_nat_hook nat_hook = {
 	.remove_nat_bysrc	= nf_nat_cleanup_conntrack,
 };
 
+unsigned int ip_nat_route_input(void *priv,
+				struct sk_buff *skb,
+				const struct nf_hook_state *state)
+{
+	struct iphdr *iph;
+	struct nf_conn *conn;
+	enum ip_conntrack_info ctinfo;
+	enum ip_conntrack_dir dir;
+	unsigned long statusbit;
+	__be32 saddr;
+
+	if (!(conn = nf_ct_get(skb, &ctinfo)))
+		return NF_ACCEPT;
+
+	if (!(conn->status & IPS_NAT_DONE_MASK))
+		return NF_ACCEPT;
+	dir = CTINFO2DIR(ctinfo);
+	statusbit = IPS_SRC_NAT;
+	if (dir == IP_CT_DIR_REPLY)
+		statusbit ^= IPS_NAT_MASK;
+	if (!(conn->status & statusbit))
+		return NF_ACCEPT;
+
+	if (skb_dst(skb))
+		return NF_ACCEPT;
+
+	if (skb->len < sizeof(struct iphdr))
+		return NF_ACCEPT;
+
+	/* use daddr in other direction as masquerade address (lsrc) */
+	iph = ip_hdr(skb);
+	saddr = conn->tuplehash[!dir].tuple.dst.u3.ip;
+	if (saddr == iph->saddr)
+		return NF_ACCEPT;
+
+	if (ip_route_input_lookup(skb, iph->daddr, iph->saddr, iph->tos,
+	    skb->dev, saddr))
+		return NF_DROP;
+
+	return NF_ACCEPT;
+}
+EXPORT_SYMBOL_GPL(ip_nat_route_input);
+
 static int __init nf_nat_init(void)
 {
 	int ret, i;

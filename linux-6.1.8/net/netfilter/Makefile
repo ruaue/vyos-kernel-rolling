@@ -226,3 +226,25 @@ obj-$(CONFIG_IP_VS) += ipvs/
 
 # lwtunnel
 obj-$(CONFIG_LWTUNNEL) += nf_hooks_lwtunnel.o
+
+# XTables Addons
+obj-$(CONFIG_NETFILTER_XT_MATCH_asn) += xt_asn.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_CHAOS) += xt_CHAOS.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_condition) += xt_condition.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_DELUDE) += xt_DELUDE.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_DHCPMAC) += xt_DHCPMAC.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_DNETMAP) += xt_DNETMAP.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_ECHO) += xt_ECHO.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_fuzzy) += xt_fuzzy.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_geoip) += xt_geoip.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_iface) += xt_iface.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_IPMARK) += xt_IPMARK.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_ipv4options) += xt_ipv4options.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_length2) += xt_length2.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_LOGMARK) += xt_LOGMARK.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_lscan) += xt_lscan.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_PROTO) += xt_PROTO.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_psd) += xt_psd.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_quota2) += xt_quota2.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_SYSRQ) += xt_SYSRQ.o
+obj-$(CONFIG_NETFILTER_XT_MATCH_TARPIT) += xt_TARPIT.o

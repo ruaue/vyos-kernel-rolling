@@ -87,6 +87,7 @@ struct flowi4 {
 #define fl4_icmp_code		uli.icmpt.code
 #define fl4_mh_type		uli.mht.type
 #define fl4_gre_key		uli.gre_key
+	__be32			fl4_gw;
 } __attribute__((__aligned__(BITS_PER_LONG/8)));
 
 static inline void flowi4_init_output(struct flowi4 *fl4, int oif,
@@ -112,6 +113,7 @@ static inline void flowi4_init_output(struct flowi4 *fl4, int oif,
 	fl4->fl4_dport = dport;
 	fl4->fl4_sport = sport;
 	fl4->flowi4_multipath_hash = 0;
+	fl4->fl4_gw = 0;
 }
 
 /* Reset some input parameters after previous lookup */

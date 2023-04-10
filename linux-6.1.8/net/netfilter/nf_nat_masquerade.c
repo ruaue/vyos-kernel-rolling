@@ -33,8 +33,8 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned int hooknum,
 	struct nf_conn_nat *nat;
 	enum ip_conntrack_info ctinfo;
 	struct nf_nat_range2 newrange;
-	const struct rtable *rt;
-	__be32 newsrc, nh;
+	struct rtable *rt;
+	__be32 newsrc;
 
 	WARN_ON(hooknum != NF_INET_POST_ROUTING);
 
@@ -49,12 +49,23 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned int hooknum,
 	if (ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple.src.u3.ip == 0)
 		return NF_ACCEPT;
 
-	rt = skb_rtable(skb);
-	nh = rt_nexthop(rt, ip_hdr(skb)->daddr);
-	newsrc = inet_select_addr(out, nh, RT_SCOPE_UNIVERSE);
-	if (!newsrc) {
-		pr_info("%s ate my IP address\n", out->name);
-		return NF_DROP;
+	{
+		struct flowi4 fl4 = { .flowi4_tos = RT_TOS(ip_hdr(skb)->tos),
+				      .flowi4_mark = skb->mark,
+				      .flowi4_oif = out->ifindex,
+				      .daddr = ip_hdr(skb)->daddr,
+				      .fl4_gw = skb_rtable(skb)->rt_gw4 };
+		rt = ip_route_output_key(dev_net(out), &fl4);
+		if (IS_ERR(rt)) {
+			/* Funky routing can do this. */
+			if (net_ratelimit())
+				pr_info("%s:"
+				       " No route: Rusty's brain broke!\n",
+				       out->name);
+			return NF_DROP;
+		}
+		newsrc = fl4.saddr;
+		ip_rt_put(rt);
 	}
 
 	nat = nf_ct_nat_ext_add(ct);

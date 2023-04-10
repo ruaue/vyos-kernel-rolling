@@ -48,6 +48,13 @@ static const struct nf_hook_ops nf_nat_ipv4_ops[] = {
 		.hooknum	= NF_INET_LOCAL_OUT,
 		.priority	= NF_IP_PRI_NAT_DST,
 	},
+	/* Before routing, route before mangling */
+	{
+		.hook		= ip_nat_route_input,
+		.pf		= NFPROTO_IPV4,
+		.hooknum	= NF_INET_PRE_ROUTING,
+		.priority	= NF_IP_PRI_LAST-1,
+	},
 	{
 		.hook		= ipt_do_table,
 		.pf		= NFPROTO_IPV4,

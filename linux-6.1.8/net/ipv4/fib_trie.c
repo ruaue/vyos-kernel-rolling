@@ -1437,6 +1437,10 @@ bool fib_lookup_good_nhc(const struct fib_nh_common *nhc, int fib_flags,
 	if (flp->flowi4_oif && flp->flowi4_oif != nhc->nhc_oif)
 		return false;
 
+	if (flp->fl4_gw && flp->fl4_gw != nhc->nhc_gw.ipv4 &&
+	    nhc->nhc_gw.ipv4 && nhc->nhc_scope == RT_SCOPE_LINK)
+		return false;
+
 	return true;
 }
 

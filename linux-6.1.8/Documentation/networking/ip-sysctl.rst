@@ -739,6 +739,24 @@ tcp_comp_sack_nr - INTEGER
 
 	Default : 44
 
+tcp_simult_connect - BOOLEAN
+	Enable TCP simultaneous connect that adds a weakness in Linux's strict
+	implementation of TCP that allows two clients to connect to each other
+	without either entering a listening state. The weakness allows an attacker
+	to easily prevent a client from connecting to a known server provided the
+	source port for the connection is guessed correctly.
+
+	As the weakness could be used to prevent an antivirus or IPS from fetching
+	updates, or prevent an SSL gateway from fetching a CRL, it should be
+	eliminated by disabling this option. Though Linux is one of few operating
+	systems supporting simultaneous connect, it has no legitimate use in
+	practice and is rarely supported by firewalls.
+
+	Disabling this may break TCP STUNT which is used by some applications for
+	NAT traversal.
+
+	Default: Value of CONFIG_TCP_SIMULT_CONNECT_DEFAULT_ON
+
 tcp_slow_start_after_idle - BOOLEAN
 	If set, provide RFC2861 behavior and time out the congestion
 	window after an idle period.  An idle period is defined at
@@ -1442,6 +1460,19 @@ forwarding - BOOLEAN
 	Enable IP forwarding on this interface.  This controls whether packets
 	received _on_ this interface can be forwarded.
 
+forward_shared - BOOLEAN
+	Integer value determines if a source validation should allow
+	forwarding of packets with local source address. 1 means yes,
+	0 means no. By default the flag is disabled and such packets
+	are not forwarded.
+ 
+	If you enable this flag on internal network, the router will forward
+	packets from internal hosts with shared IP addresses no matter how
+	the rp_filter is set. This flag is activated only if it is
+	enabled both in specific device section and in "all" section.
+
+	The forward_shared value could be ignored when rp_filter is set to 0.
+
 mc_forwarding - BOOLEAN
 	Do multicast routing. The kernel needs to be compiled with CONFIG_MROUTE
 	and a multicast routing daemon is required.
@@ -1591,6 +1622,26 @@ src_valid_mark - BOOLEAN
 	The max value from conf/{all,interface}/src_valid_mark is used.
 
 	Default value is 0.
+
+link_filter - INTEGER
+	0 - Allow packets to be received for the address on this interface
+	    even if interface is disabled or no carrier.
+	1 - Ignore packets received if interface associated with the incoming
+	    address is down.
+	2 - Ignore packets received if interface associated with the incoming
+	    address is down or has no carrier.
+
+	Default value is 0. Note that some distributions enable it
+	in startup scripts.
+
+rp_filter_mask - INTEGER
+	Integer value representing bitmask of the mediums for which the
+	reverse path protection is disabled. If the source validation
+	results in reverse path to interface with medium_id value in
+	the 1..31 range the access is allowed if the corresponding bit
+	is set in the bitmask. The bitmask value is considered only when
+	rp_filter is enabled. By default the bitmask is empty preserving
+	the original rp_filter semantic.
 
 arp_filter - BOOLEAN
 	- 1 - Allows you to have multiple network interfaces on the same
@@ -1757,6 +1808,14 @@ drop_gratuitous_arp - BOOLEAN
 
 	Default: off (0)
 
+
+hidden - BOOLEAN
+	Hide addresses attached to this device from other devices.
+	Such addresses will never be selected by source address autoselection
+	mechanism, host does not answer broadcast ARP requests for them,
+	does not announce them as source address of ARP requests, but they
+	are still reachable via IP. This flag is activated only if it is
+	enabled both in specific device section and in "all" section.
 
 tag - INTEGER
 	Allows you to write a number, which can be used as required.

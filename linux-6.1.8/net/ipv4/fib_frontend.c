@@ -49,6 +49,8 @@
 
 #ifndef CONFIG_IP_MULTIPLE_TABLES
 
+#define FIB_RES_TABLE(r) (RT_TABLE_MAIN)
+
 static int __net_init fib4_rules_init(struct net *net)
 {
 	struct fib_table *local_table, *main_table;
@@ -72,6 +74,8 @@ fail:
 	return -ENOMEM;
 }
 #else
+
+#define FIB_RES_TABLE(r) (fib_result_table(r))
 
 struct fib_table *fib_new_table(struct net *net, u32 id)
 {
@@ -343,13 +347,19 @@ EXPORT_SYMBOL_GPL(fib_info_nh_uses_dev);
  */
 static int __fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 				 u8 tos, int oif, struct net_device *dev,
-				 int rpf, struct in_device *idev, u32 *itag)
+				 int rpf, struct in_device *idev, u32 *itag,
+				 int our)
 {
 	struct net *net = dev_net(dev);
 	struct flow_keys flkeys;
+	u32 table;
+	unsigned char prefixlen;
+	unsigned char scope;
 	int ret, no_addr;
 	struct fib_result res;
 	struct flowi4 fl4;
+	int fwdsh;
+	unsigned int rpf_mask;
 	bool dev_match;
 
 	fl4.flowi4_oif = 0;
@@ -363,10 +373,13 @@ static int __fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 	fl4.flowi4_flags = 0;
 	fl4.flowi4_uid = sock_net_uid(net, NULL);
 	fl4.flowi4_multipath_hash = 0;
+	fl4.fl4_gw = 0;
 
 	no_addr = idev->ifa_list == NULL;
 
+	fwdsh = IN_DEV_FORWARD_SHARED(idev);
 	fl4.flowi4_mark = IN_DEV_SRC_VMARK(idev) ? skb->mark : 0;
+	rpf_mask = IN_DEV_RPFILTER_MASK(idev);
 	if (!fib4_rules_early_flow_dissect(net, skb, &fl4, &flkeys)) {
 		fl4.flowi4_proto = 0;
 		fl4.fl4_sport = 0;
@@ -377,7 +390,12 @@ static int __fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 
 	if (fib_lookup(net, &fl4, &res, 0))
 		goto last_resort;
-	if (res.type != RTN_UNICAST &&
+	if (fwdsh) {
+		fwdsh = (res.type == RTN_LOCAL && !our);
+		if (fwdsh)
+			rpf = 0;
+	}
+	if (res.type != RTN_UNICAST && !fwdsh &&
 	    (res.type != RTN_LOCAL || !IN_DEV_ACCEPT_LOCAL(idev)))
 		goto e_inval;
 	fib_combine_itag(itag, &res);
@@ -392,17 +410,36 @@ static int __fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 		ret = FIB_RES_NHC(res)->nhc_scope >= RT_SCOPE_HOST;
 		return ret;
 	}
+	if (rpf_mask && rpf) {
+		int omi = 0;
+
+		idev = __in_dev_get_rcu(FIB_RES_DEV(res));
+		if (idev)
+			omi = IN_DEV_MEDIUM_ID(idev);
+		if (omi >= 1 && omi <= 31 && ((1 << omi) & rpf_mask))
+			rpf = 0;
+	}
 	if (no_addr)
 		goto last_resort;
-	if (rpf == 1)
-		goto e_rpf;
+	table = FIB_RES_TABLE(&res);
+	prefixlen = res.prefixlen;
+	scope = res.scope;
 	fl4.flowi4_oif = dev->ifindex;
+	if (fwdsh)
+		fl4.flowi4_iif = LOOPBACK_IFINDEX;
 
 	ret = 0;
 	if (fib_lookup(net, &fl4, &res, FIB_LOOKUP_IGNORE_LINKSTATE) == 0) {
-		if (res.type == RTN_UNICAST)
+		if (res.type == RTN_UNICAST &&
+		    ((table == FIB_RES_TABLE(&res) &&
+		      res.prefixlen >= prefixlen && res.scope >= scope) ||
+		     !rpf)) {
 			ret = FIB_RES_NHC(res)->nhc_scope >= RT_SCOPE_HOST;
+			return ret;
+		}
 	}
+	if (rpf == 1)
+		goto e_rpf;
 	return ret;
 
 last_resort:
@@ -420,7 +457,7 @@ e_rpf:
 /* Ignore rp_filter for packets protected by IPsec. */
 int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
 			u8 tos, int oif, struct net_device *dev,
-			struct in_device *idev, u32 *itag)
+			struct in_device *idev, u32 *itag, int our)
 {
 	int r = secpath_exists(skb) ? 0 : IN_DEV_RPFILTER(idev);
 	struct net *net = dev_net(dev);
@@ -448,7 +485,8 @@ ok:
 	}
 
 full_check:
-	return __fib_validate_source(skb, src, dst, tos, oif, dev, r, idev, itag);
+	return __fib_validate_source(skb, src, dst, tos, oif, dev, r, idev,
+				     itag, our);
 }
 
 static inline __be32 sk_extract_addr(struct sockaddr *addr)
@@ -1435,9 +1473,7 @@ static int fib_inetaddr_event(struct notifier_block *this, unsigned long event, 
 	switch (event) {
 	case NETDEV_UP:
 		fib_add_ifaddr(ifa);
-#ifdef CONFIG_IP_ROUTE_MULTIPATH
 		fib_sync_up(dev, RTNH_F_DEAD);
-#endif
 		atomic_inc(&net->ipv4.dev_addr_genid);
 		rt_cache_flush(dev_net(dev));
 		break;
@@ -1482,9 +1518,7 @@ static int fib_netdev_event(struct notifier_block *this, unsigned long event, vo
 		in_dev_for_each_ifa_rtnl(ifa, in_dev) {
 			fib_add_ifaddr(ifa);
 		}
-#ifdef CONFIG_IP_ROUTE_MULTIPATH
 		fib_sync_up(dev, RTNH_F_DEAD);
-#endif
 		atomic_inc(&net->ipv4.dev_addr_genid);
 		rt_cache_flush(net);
 		break;
