@@ -23,6 +23,9 @@ jobs:
         set -eux
         pwd
         cd build
+        wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.8.tar.xz
+        tar xf linux-6.1.8.tar.xz
+        ln -s linux-6.1.8 linux
         ./build-kernel.sh
 
 
