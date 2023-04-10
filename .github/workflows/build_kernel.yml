@@ -22,7 +22,7 @@ jobs:
       run: |
         set -eux
         pwd
-        cd build
+#        cd build
         ./build-kerel.sh
 
 
