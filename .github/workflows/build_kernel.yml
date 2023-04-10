@@ -22,8 +22,8 @@ jobs:
       run: |
         set -eux
         pwd
-#        cd build
-        ./build-kerel.sh
+        cd build
+        ./build-kernel.sh
 
 
     - name: ls
