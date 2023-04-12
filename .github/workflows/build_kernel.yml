@@ -26,7 +26,7 @@ jobs:
       run: |
         set -eux
         
-        git clone -b dev-dae-fullconenat https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
+         git clone -b dev-dae-fullconenat https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
 
     - name: make deb
     #  working-directory: vyos-kernel-sv-fullconenat
