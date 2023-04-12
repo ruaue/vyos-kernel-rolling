@@ -2,10 +2,11 @@ name: VyOS 1.4 sv fullconenat dae kernel Build and Release
 permissions:
   contents: write
 on:
-  push:
-    tags:
-      - "*"
-
+  workflow_dispatch:
+   #push:
+   #tags:
+   #- "*"
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +26,7 @@ jobs:
       run: |
         set -eux
         
-        git clone  -b dev https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
+        git clone  -b dev-dae-fullconenat https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
 
     - name: make deb
     #  working-directory: vyos-kernel-sv-fullconenat
@@ -33,9 +34,9 @@ jobs:
         set -eux
         pwd
         cd vyos-build
-        wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.8.tar.xz
-        tar xf linux-6.1.8.tar.xz
-        ln -s linux-6.1.8 linux
+       # wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.8.tar.xz
+      #  tar xf linux-6.1.8.tar.xz
+       # ln -s linux-6.1.8 linux
         ./build-kernel.sh
 
 
