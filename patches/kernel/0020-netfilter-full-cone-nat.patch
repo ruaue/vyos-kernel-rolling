@@ -16,7 +16,7 @@ diff --git a/net/ipv4/netfilter/Kconfig b/net/ipv4/netfilter/Kconfig
 index f3dfd08b7..6340f0eaf 100644
 --- a/net/ipv4/netfilter/Kconfig
 +++ b/net/ipv4/netfilter/Kconfig
-@@ -245,6 +245,15 @@ config IP_NF_TARGET_NETMAP
+@@ -237,6 +237,15 @@ config IP_NF_TARGET_NETMAP
  	(e.g. when running oldconfig). It selects
  	CONFIG_NETFILTER_XT_TARGET_NETMAP.
  
