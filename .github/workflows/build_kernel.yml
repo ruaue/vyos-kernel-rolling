@@ -37,7 +37,6 @@ jobs:
         tar xf linux-6.1.22.tar.xz
         ln -s linux-6.1.22 linux
         ./build-kernel.sh
-        rm *dev*.deb
     
     - name: make intel-qat deb
       run: |
