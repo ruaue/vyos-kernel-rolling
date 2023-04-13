@@ -33,7 +33,7 @@ jobs:
         set -eux
         pwd
         cd linux-kernel
-        wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.23.tar.xz
+        wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.22.tar.xz
         tar xf linux-6.1.22.tar.xz
         ln -s linux-6.1.22 linux
         ./build-kernel.sh
