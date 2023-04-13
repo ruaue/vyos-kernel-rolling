@@ -26,17 +26,16 @@ jobs:
       run: |
         set -eux
         
-         git clone -b dev-dae-fullconenat https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
+         git clone  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
 
     - name: make kernel deb
-    #  working-directory: vyos-kernel-sv-fullconenat
+      working-directory: vyos-kernel-eBPF-fullconenat
       run: |
         set -eux
         pwd
-        cd vyos-build 
+        cd linux-kernel
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.23.tar.xz
         tar xf linux-6.1.23.tar.xz
-        sleep 120s
         ln -s linux-6.1.23 linux
         ./build-kernel.sh
         rm *dev".deb
@@ -53,13 +52,13 @@ jobs:
         set -eux
 
         pwd
-        ls -lah vyos-build
+        ls -lah linux-kernel
 
     - name: Upload release
       uses: softprops/action-gh-release@v1
       with:
           tag_name: ${{ github.ref_name }}
-          files: vyos-build/linux*.deb
+          files: linux-kernel/linux*.deb
           draft: true
           prerelease: true
           
