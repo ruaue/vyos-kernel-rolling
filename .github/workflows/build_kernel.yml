@@ -40,12 +40,12 @@ jobs:
         rm *dev*.deb
     
     - name: make intel-qat deb
-    
       run: |
         set -eux
         pwd
+        cd linux-kernel
         ./build-intel-qat.sh
-        
+        cp *.deb ../
     - name: ls
       run: |
         set -eux
