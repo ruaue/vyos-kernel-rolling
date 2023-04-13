@@ -28,7 +28,7 @@ jobs:
         
          git clone -b dev-dae-fullconenat https://github.com/debiansid/vyos-kernel-sv-fullconenat vyos-build
 
-    - name: make deb
+    - name: make kernel deb
     #  working-directory: vyos-kernel-sv-fullconenat
       run: |
         set -eux
@@ -40,8 +40,14 @@ jobs:
         ln -s linux-6.1.23 linux
         ./build-kernel.sh
         rm *dev".deb
-
-
+    
+    - name: make intel-qat deb
+    
+      run: |
+        set -eux
+        pwd
+        ./build-intel-qat.sh
+        
     - name: ls
       run: |
         set -eux
