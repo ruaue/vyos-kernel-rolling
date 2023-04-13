@@ -28,7 +28,7 @@ jobs:
          git clone  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
 
     - name: make kernel deb
-      working-directory: vyos-kernel-eBPF-fullconenat
+    #  working-directory: linux-kernel
       run: |
         set -eux
         pwd
