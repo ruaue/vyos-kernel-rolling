@@ -34,7 +34,7 @@ jobs:
       run: |
         set -eux
         pwd
-        sudo apt-get --install-recommends install pahole dwarves libdw1
+        sudo apt-get --install-recommends install pahole dwarves
 
         cd linux-kernel
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.24.tar.xz
