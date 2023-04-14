@@ -27,12 +27,14 @@ jobs:
         set -eux
         
          git clone -b dev  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
-
+         
+         
     - name: make kernel deb
     #  working-directory: linux-kernel
       run: |
         set -eux
         pwd
+        sudo apt-get --install-recommends install pahole dwarves 
         cd linux-kernel
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.24.tar.xz
         tar xf linux-6.1.24.tar.xz
