@@ -26,7 +26,7 @@ jobs:
       run: |
         set -eux
         
-         git clone  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
+         git clone -b dev  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
 
     - name: make kernel deb
     #  working-directory: linux-kernel
