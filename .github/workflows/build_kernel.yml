@@ -1,11 +1,10 @@
-name: VyOS 1.4 fullconenat dae kernel Build and Release
+name: VyOS 1.4 dae fullconenat kernel Build and Release
 permissions:
   contents: write
 on:
- workflow_dispatch:
- #push:
-  #  tags:
-   #  - "*"
+  push:
+    tags:
+      - "*"
   
 jobs:
   build:
