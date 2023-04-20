@@ -1,4 +1,4 @@
-name: VyOS 1.4 dae fullconenat kernel Build and Release
+name: VyOS 1.4 rolling fullconenat kernel Build and Release
 permissions:
   contents: write
 on:
@@ -25,7 +25,7 @@ jobs:
       run: |
         set -eux
         
-         git clone -b dev  https://github.com/debiansid/vyos-kernel-eBPF-fullconenat linux-kernel
+         git clone -b dev  https://github.com/debiansid/vyos-kernel-rolling linux-kernel
          
          
     - name: make kernel deb
@@ -33,14 +33,13 @@ jobs:
       run: |
         set -eux
         pwd
-        sudo apt-get --install-recommends install pahole dwarves
 
         cd linux-kernel
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.24.tar.xz
         tar xf linux-6.1.24.tar.xz
         ln -s linux-6.1.24 linux
         ./build-kernel.sh
-        rm *dbg*.deb *dev*.deb
+        rm *dev*.deb
     - name: make intel-qat deb
       run: |
         set -eux
