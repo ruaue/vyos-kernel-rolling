@@ -46,7 +46,7 @@ jobs:
         pwd
         cd linux-kernel
         ./build-intel-qat.sh
-        cp *.deb ../
+        cp -f *.deb ../
     - name: ls
       run: |
         set -eux
