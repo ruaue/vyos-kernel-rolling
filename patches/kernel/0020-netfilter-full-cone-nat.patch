@@ -1,19 +1,11 @@
-From 2dc7418c5f412f6b2686a614c0e60591709aa268 Mon Sep 17 00:00:00 2001
-From: eric zen <debiansid@gmail.com>
-Date: Mon, 10 Apr 2023 11:29:20 +0800
-Subject: [PATCH] patch kernel with
- https://github.com/llccd/netfilter-full-cone-nat
+commit e6ee0cbf5c99954714c0c5c0f9ee9fb9f9b45b6a
+Author: debiansid <debiansid@gmail.com>
+Date:   Fri Jan 5 12:24:42 2024 -0500
 
----
- /net/ipv4/netfilter/Kconfig     |    9 +
- /net/netfilter/Kconfig          |    8 +
- /net/netfilter/Makefile         |    1 +
- /net/netfilter/xt_FULLCONENAT.c | 1419 ++++++++++++++++++++
- 4 files changed, 1437 insertions(+)
- create mode 100644 linux-6.1.8/net/netfilter/xt_FULLCONENAT.c
+    netfilter-fullcone-nat patch from https://github.com/llccd/netfilter-full-cone-nat
 
 diff --git a/net/ipv4/netfilter/Kconfig b/net/ipv4/netfilter/Kconfig
-index f3dfd08b7..6340f0eaf 100644
+index f71a7e9a7..11d9d2a4a 100644
 --- a/net/ipv4/netfilter/Kconfig
 +++ b/net/ipv4/netfilter/Kconfig
 @@ -237,6 +237,15 @@ config IP_NF_TARGET_NETMAP
@@ -33,10 +25,10 @@ index f3dfd08b7..6340f0eaf 100644
  	tristate "REDIRECT target support"
  	depends on NETFILTER_ADVANCED
 diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index 830db6c1a..68e89fe47 100644
+index 441d1f134..443746b81 100644
 --- a/net/netfilter/Kconfig
 +++ b/net/netfilter/Kconfig
-@@ -995,6 +995,14 @@ config NETFILTER_XT_TARGET_NETMAP
+@@ -997,6 +997,14 @@ config NETFILTER_XT_TARGET_NETMAP
  
  	To compile it as a module, choose M here. If unsure, say N.
  
@@ -52,10 +44,10 @@ index 830db6c1a..68e89fe47 100644
  	tristate '"NFLOG" target support'
  	default m if NETFILTER_ADVANCED=n
 diff --git a/net/netfilter/Makefile b/net/netfilter/Makefile
-index ad1735ed3..534cce712 100644
+index d4958e7e7..b4776b5eb 100644
 --- a/net/netfilter/Makefile
 +++ b/net/netfilter/Makefile
-@@ -159,6 +159,7 @@ obj-$(CONFIG_NETFILTER_XT_TARGET_HMARK) += xt_HMARK.o
+@@ -168,6 +168,7 @@ obj-$(CONFIG_NETFILTER_XT_TARGET_HMARK) += xt_HMARK.o
  obj-$(CONFIG_NETFILTER_XT_TARGET_LED) += xt_LED.o
  obj-$(CONFIG_NETFILTER_XT_TARGET_LOG) += xt_LOG.o
  obj-$(CONFIG_NETFILTER_XT_TARGET_NETMAP) += xt_NETMAP.o
@@ -1488,6 +1480,3 @@ index 000000000..30e76868c
 +MODULE_ALIAS("ip6t_FULLCONENAT");
 +#endif
 +MODULE_ALIAS("ipt_FULLCONENAT");
--- 
-2.30.2
-
