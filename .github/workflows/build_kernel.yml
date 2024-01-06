@@ -46,7 +46,7 @@ jobs:
         pwd
         cd linux-kernel
         ./build-intel-qat.sh
-        cp -f *.deb ../
+        cp  vyos-intel-qat*.deb ../
     - name: ls
       run: |
         set -eux
