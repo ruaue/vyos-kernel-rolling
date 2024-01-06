@@ -1,1 +1,1 @@
-# vyos-kernel-sv-fullconenat
+# vyos-kernel-fullconenat
