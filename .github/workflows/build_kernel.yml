@@ -1,4 +1,4 @@
-name: VyOS 1.5 rolling fullconenat kernel Build and Release
+name: build VyOS kernel with nftables fullcone 
 permissions:
   contents: write
 on:
