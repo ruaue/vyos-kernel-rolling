@@ -1,44 +1,39 @@
-commit 38919429b01ba786f0069cd4498d2019e3775bd1
+commit db0d8195c88a2621270c240d222adca64ff0c5fa
 Author: debiansid <debiansid@gmail.com>
-Date:   Sun Jan 7 03:04:22 2024 -0500
+Date:   Sun Jan 7 04:23:33 2024 -0500
 
-    Add nftables fullcone support
+    add fullcone patch
 
 diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index 441d1f134..90002f56d 100644
+index 441d1f134..00674b689 100644
 --- a/net/netfilter/Kconfig
 +++ b/net/netfilter/Kconfig
-@@ -703,6 +703,20 @@ config NFT_FIB_NETDEV
- 	  This option allows using the FIB expression from the netdev table.
+@@ -704,6 +704,15 @@ config NFT_FIB_NETDEV
  	  The lookup will be delegated to the IPv4 or IPv6 FIB depending
  	  on the protocol of the packet.
-+#
-+# Nftables/netfilter fullcone expression support
-+#
+ 
 +config NFT_FULLCONE
 +	depends on NF_CONNTRACK
 +	depends on NF_NAT
 +	tristate "Netfilter nf_tables fullcone support"
 +	help
-+	  This options adds the "fullcone" expression that you can us to perform NAT in the RFC3489-compatible full cone SNAT flavour.
-+	  Currently only UDP traffic is supported for full-cone NAT. For other protos FULLCONENAT is equivalent to MASQUERADE.
++	NFT Full Cone 
 +
-+	To compile this code as a module, choose M here: the module will be called nft_fullcone.
++  To compile it as a module, choose M here. If unsure, say N.
 +
-+	If unsure, say N.
- 
  config NFT_REJECT_NETDEV
  	depends on NFT_REJECT_IPV4
+ 	depends on NFT_REJECT_IPV6
 diff --git a/net/netfilter/Makefile b/net/netfilter/Makefile
-index d4958e7e7..1e3be6c2a 100644
+index d4958e7e7..871560c7a 100644
 --- a/net/netfilter/Makefile
 +++ b/net/netfilter/Makefile
 @@ -127,6 +127,8 @@ obj-$(CONFIG_NFT_HASH)		+= nft_hash.o
  obj-$(CONFIG_NFT_FIB)		+= nft_fib.o
  obj-$(CONFIG_NFT_FIB_INET)	+= nft_fib_inet.o
  obj-$(CONFIG_NFT_FIB_NETDEV)	+= nft_fib_netdev.o
-+obj-$(CONFIG_NFT_FULLCONE)	+= nf_nat_fullcone.o \
-+	nft_ext_fullcone.o
++obj-$(CONFIG_NFT_FULCONE)	+= nf_nat_fullcone.o nft_ext_fullcone.o
++obj-$(CONFIG_NFT_NETDEV)	+= nft_fib_netdev.o
  obj-$(CONFIG_NFT_SOCKET)	+= nft_socket.o
  obj-$(CONFIG_NFT_OSF)		+= nft_osf.o
  obj-$(CONFIG_NFT_TPROXY)	+= nft_tproxy.o
