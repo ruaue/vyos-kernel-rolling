@@ -19,7 +19,7 @@ index 441d1f134..00674b689 100644
 +	help
 +	NFT Full Cone 
 +
-+  To compile it as a module, choose M here. If unsure, say N.
++	To compile it as a module, choose M here. If unsure, say N.
 +
  config NFT_REJECT_NETDEV
  	depends on NFT_REJECT_IPV4
