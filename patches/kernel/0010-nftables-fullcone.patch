@@ -1,16 +1,16 @@
-commit db0d8195c88a2621270c240d222adca64ff0c5fa
+commit f5c4026cb490f04fdbff2998df59f7721eb64a7b
 Author: debiansid <debiansid@gmail.com>
-Date:   Sun Jan 7 04:23:33 2024 -0500
+Date:   Sun Jan 7 07:05:32 2024 -0500
 
-    add fullcone patch
+    Add nftables fullcone expression
 
 diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
-index 441d1f134..00674b689 100644
+index 441d1f134..825521062 100644
 --- a/net/netfilter/Kconfig
 +++ b/net/netfilter/Kconfig
-@@ -704,6 +704,15 @@ config NFT_FIB_NETDEV
- 	  The lookup will be delegated to the IPv4 or IPv6 FIB depending
- 	  on the protocol of the packet.
+@@ -718,6 +718,15 @@ endif # NF_TABLES_NETDEV
+ 
+ endif # NF_TABLES
  
 +config NFT_FULLCONE
 +	depends on NF_CONNTRACK
@@ -21,22 +21,24 @@ index 441d1f134..00674b689 100644
 +
 +	To compile it as a module, choose M here. If unsure, say N.
 +
- config NFT_REJECT_NETDEV
- 	depends on NFT_REJECT_IPV4
- 	depends on NFT_REJECT_IPV6
+ config NF_FLOW_TABLE_INET
+ 	tristate "Netfilter flow table mixed IPv4/IPv6 module"
+ 	depends on NF_FLOW_TABLE
 diff --git a/net/netfilter/Makefile b/net/netfilter/Makefile
-index d4958e7e7..871560c7a 100644
+index d4958e7e7..7dd8ae378 100644
 --- a/net/netfilter/Makefile
 +++ b/net/netfilter/Makefile
-@@ -127,6 +127,8 @@ obj-$(CONFIG_NFT_HASH)		+= nft_hash.o
- obj-$(CONFIG_NFT_FIB)		+= nft_fib.o
- obj-$(CONFIG_NFT_FIB_INET)	+= nft_fib_inet.o
- obj-$(CONFIG_NFT_FIB_NETDEV)	+= nft_fib_netdev.o
-+obj-$(CONFIG_NFT_FULCONE)	+= nf_nat_fullcone.o nft_ext_fullcone.o
-+obj-$(CONFIG_NFT_NETDEV)	+= nft_fib_netdev.o
- obj-$(CONFIG_NFT_SOCKET)	+= nft_socket.o
- obj-$(CONFIG_NFT_OSF)		+= nft_osf.o
- obj-$(CONFIG_NFT_TPROXY)	+= nft_tproxy.o
+@@ -138,7 +138,9 @@ obj-$(CONFIG_NFT_NAT)		+= nft_chain_nat.o
+ # nf_tables netdev
+ obj-$(CONFIG_NFT_DUP_NETDEV)	+= nft_dup_netdev.o
+ obj-$(CONFIG_NFT_FWD_NETDEV)	+= nft_fwd_netdev.o
+-
++# nft_fullcone
++obj-$(CONFIG_NFT_FULLCONE)	+= nft_fullcone.o
++nft_fullcone-objs		:= nf_nat_fullcone.o nft_ext_fullcone.o
+ # flow table infrastructure
+ obj-$(CONFIG_NF_FLOW_TABLE)	+= nf_flow_table.o
+ nf_flow_table-objs		:= nf_flow_table_core.o nf_flow_table_ip.o \
 diff --git a/net/netfilter/nf_nat_fullcone.c b/net/netfilter/nf_nat_fullcone.c
 new file mode 100644
 index 000000000..0b13cbebd
