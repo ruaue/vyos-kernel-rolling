@@ -36,7 +36,7 @@ jobs:
 
         cd linux-kernel
         wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.79.tar.xz
-        tar xf linux-6.6.79.tarzgz
+        tar xf linux-6.6.79.tar.xz
         ln -s linux-6.6.79 linux 
         ./build-kernel.sh
         rm *dev*.deb
